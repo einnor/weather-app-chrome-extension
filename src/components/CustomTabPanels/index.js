@@ -21,14 +21,14 @@ const CustomTabPanels = () => {
   return (
     <>
       <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
-        <Tab label="Item One" {...a11yProps(0)} />
-        <Tab label="Item Two" {...a11yProps(1)} />
+        <Tab label="Current Weather" {...a11yProps(0)} />
+        <Tab label="Forecast" {...a11yProps(1)} />
       </Tabs>
       <TabPanel value={value} index={0}>
-        Item One
+        Current Weather
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Item Two
+        Forecast
       </TabPanel>
     </>
   );
