@@ -85,6 +85,13 @@ const SearchLocation = () => {
     };
   }, [inputValue, fetch]);
 
+  const onLocationChange = (e, value) => {
+    console.log(e, value);
+    // TODO
+    // Add to context
+    // Send request to get weather details for this location
+  };
+
   return (
     <Autocomplete
       id="google-map-demo"
@@ -95,10 +102,11 @@ const SearchLocation = () => {
       includeInputInList
       freeSolo
       disableOpenOnFocus
+      onChange={onLocationChange}
       renderInput={params => (
         <TextField
           {...params}
-          label="Search a location..."
+          label="Search a place..."
           variant="standard"
           fullWidth
           onChange={handleChange}
