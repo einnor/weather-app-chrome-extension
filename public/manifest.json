@@ -14,5 +14,5 @@
     "default_popup": "index.html",
     "default_title": "Weather Widget"
   },
-  "content_security_policy": "script-src 'self' 'sha256-yKt32LmVkbfF80KiP02z3p8WgtxhcgO2lmnunwHBpjM='; object-src 'self'"
+  "content_security_policy": "script-src 'self' 'sha256-yKt32LmVkbfF80KiP02z3p8WgtxhcgO2lmnunwHBpjM=' https://maps.googleapis.com https://maps.gstatic.com; object-src 'self'"
 }

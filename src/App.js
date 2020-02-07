@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { LocationProvider } from './context/LocationContext';
 import Nav from './components/Nav';
-import SearchCity from './components/SearchCity';
+import SearchLocation from './components/SearchLocation';
 import CustomTabPanels from './components/CustomTabPanels';
 
 const useStyles = makeStyles(theme => ({
@@ -33,7 +33,7 @@ const App = () => {
         <div className={classes.subRoot}>
           <Nav />
           <div className={classes.content}>
-            <SearchCity />
+            <SearchLocation />
             <CustomTabPanels />
           </div>
         </div>
