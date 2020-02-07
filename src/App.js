@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
+import { LocationProvider } from './context/LocationContext';
 import Nav from './components/Nav';
 import SearchCity from './components/SearchCity';
 import CustomTabPanels from './components/CustomTabPanels';
@@ -27,15 +28,17 @@ const App = () => {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
-      <div className={classes.subRoot}>
-        <Nav />
-        <div className={classes.content}>
-          <SearchCity />
-          <CustomTabPanels />
+    <LocationProvider>
+      <div className={classes.root}>
+        <div className={classes.subRoot}>
+          <Nav />
+          <div className={classes.content}>
+            <SearchCity />
+            <CustomTabPanels />
+          </div>
         </div>
       </div>
-    </div>
+    </LocationProvider>
   );
 };
 
