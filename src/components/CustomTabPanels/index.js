@@ -3,6 +3,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
 import TabPanel from '../TabPanel';
+import WeatherDetails from '../WeatherDetails';
 
 const a11yProps = (index) => {
   return {
@@ -25,7 +26,7 @@ const CustomTabPanels = () => {
         <Tab label="Forecast" {...a11yProps(1)} />
       </Tabs>
       <TabPanel value={value} index={0}>
-        Current Weather
+        <WeatherDetails />
       </TabPanel>
       <TabPanel value={value} index={1}>
         Forecast
