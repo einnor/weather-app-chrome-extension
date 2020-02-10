@@ -29,7 +29,7 @@ const CustomTabPanels = () => {
         <WeatherDetails />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Forecast
+        Coming Soon
       </TabPanel>
     </>
   );
