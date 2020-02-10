@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useContext } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
@@ -7,6 +7,9 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import parse from 'autosuggest-highlight/parse';
 import throttle from 'lodash/throttle';
+
+import { LocationContext } from '../../context/LocationContext';
+import Api from '../../services/Api';
 
 const loadScript = (src, position, id) => {
   if (!position) {
@@ -31,6 +34,7 @@ const useStyles = makeStyles(theme => ({
 
 const SearchLocation = () => {
   const classes = useStyles();
+  const context = useContext(LocationContext);
   const [inputValue, setInputValue] = useState('');
   const [options, setOptions] = useState([]);
   const loaded = useRef(false);
@@ -85,11 +89,10 @@ const SearchLocation = () => {
     };
   }, [inputValue, fetch]);
 
-  const onLocationChange = (e, value) => {
-    console.log(e, value);
-    // TODO
-    // Add to context
-    // Send request to get weather details for this location
+  const onLocationChange = async (e, value) => {
+    const location = value.structured_formatting.main_text;
+    context.setLocation(location);
+    await Api.searchWeather(location);
   };
 
   return (
