@@ -91,6 +91,7 @@ const SearchLocation = () => {
 
   const onLocationChange = (e, value) => {
     if (value && value.structured_formatting && value.structured_formatting.main_text) {
+      console.log(value);
       const location = value.structured_formatting.main_text;
       context.setLocation(location);
     }

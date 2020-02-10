@@ -7,12 +7,21 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import moment from 'moment';
 
 import { LocationContext } from '../../context/LocationContext';
 import Api from '../../services/Api';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
+  loaderWrapper: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: 300,
+  },
   summary: {
     width: '100%',
     display: 'flex',
@@ -27,7 +36,7 @@ const useStyles = makeStyles({
   table: {
     width: '100%',
   },
-});
+}));
 
 const WeatherDetails = () => {
   const classes = useStyles();
@@ -61,6 +70,7 @@ const WeatherDetails = () => {
 
   const getWeatherDetails = useCallback(async () => {
     setIsLoading(true);
+    console.log(context.location);
     const results = await Api.searchWeather(context.location);
     setWeatherDetails(results.data);
     setIsLoading(false);
@@ -120,7 +130,9 @@ const WeatherDetails = () => {
     <>
       {
         isLoading ? (
-          <div>Loading...</div>
+          <div className={classes.loaderWrapper}>
+            <CircularProgress />
+          </div>
         ) : Object.keys(weatherDetails).length ? (
           <>
             <div className={classes.summary}>
