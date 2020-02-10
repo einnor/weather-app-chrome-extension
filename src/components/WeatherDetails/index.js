@@ -116,8 +116,6 @@ const WeatherDetails = () => {
     }
   }
 
-  console.log(weatherDetails);
-
   return (
     <>
       {
