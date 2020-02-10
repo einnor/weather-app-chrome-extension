@@ -89,10 +89,11 @@ const SearchLocation = () => {
     };
   }, [inputValue, fetch]);
 
-  const onLocationChange = async (e, value) => {
-    const location = value.structured_formatting.main_text;
-    context.setLocation(location);
-    await Api.searchWeather(location);
+  const onLocationChange = (e, value) => {
+    if (value && value.structured_formatting && value.structured_formatting.main_text) {
+      const location = value.structured_formatting.main_text;
+      context.setLocation(location);
+    }
   };
 
   return (

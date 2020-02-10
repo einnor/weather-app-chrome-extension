@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Table from '@material-ui/core/Table';
@@ -9,50 +9,8 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import moment from 'moment';
 
-const data = {
-  coord: {
-    lon: 36.82,
-  lat: -1.28
-  },
-  weather: [
-    {
-      id: 801,
-      main: "Clouds",
-      description: "few clouds",
-      icon: "02d"
-    }
-  ],
-  base: "stations",
-  main: {
-    temp: 298.02,
-    feels_like: 293.05,
-    temp_min: 296.48,
-    temp_max: 299.15,
-    pressure: 1022,
-    humidity: 36
-  },
-  visibility: 10000,
-  wind: {
-    speed: 6.7,
-    deg: 50
-  },
-  clouds: {
-    all: 20
-  },
-  dt: 1581071499,
-  sys: {
-    type: 1,
-    id: 2543,
-    country: "KE",
-    sunrise: 1581046918,
-    sunset: 1581090702
-  },
-  timezone: 10800,
-  id: 184745,
-  name: "Nairobi",
-  cod: 200
-};
-
+import { LocationContext } from '../../context/LocationContext';
+import Api from '../../services/Api';
 
 const useStyles = makeStyles({
   summary: {
@@ -73,9 +31,12 @@ const useStyles = makeStyles({
 
 const WeatherDetails = () => {
   const classes = useStyles();
+  const context = useContext(LocationContext);
+  const [weatherDetails, setWeatherDetails] = useState({});
   const [rows, setRows] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
+  const formatDataIntoRows = (data) => {
     if (data) {
       const newRows = [];
       newRows.push({ name: 'Wind', value: getWindDetails(data.wind) });
@@ -87,8 +48,29 @@ const WeatherDetails = () => {
       newRows.push({ name: 'Geo Coords', value: `[ ${data.coord.lat}, ${data.coord.lon} ]` });
 
       setRows(newRows);
+    } else {
+      setRows([]);
     }
-  }, []);
+  };
+
+  useEffect(() => {
+    if (Object.keys(weatherDetails).length) {
+      formatDataIntoRows(weatherDetails);
+    }
+  }, [weatherDetails]);
+
+  const getWeatherDetails = useCallback(async () => {
+    setIsLoading(true);
+    const results = await Api.searchWeather(context.location);
+    setWeatherDetails(results.data);
+    setIsLoading(false);
+  }, [context.location]);
+
+  useEffect(() => {
+    if (context.location) {
+      getWeatherDetails();
+    }
+  }, [context.location, getWeatherDetails]);
 
   const getWindDetails = (wind) => {
     const description = getWindDescription(wind.speed);
@@ -134,28 +116,38 @@ const WeatherDetails = () => {
     }
   }
 
+  console.log(weatherDetails);
+
   return (
     <>
-      <div className={classes.summary}>
-        <img className={classes.weatherImage} src={`http://openweathermap.org/img/w/${data.weather[0].icon}.png`} alt="Weather representation" />
-        <Typography variant="h4" gutterBottom>
-          {data.main.temp} &deg;C
-        </Typography>
-      </div>
-      <TableContainer component={Paper}>
-        <Table className={classes.table} aria-label="simple table">
-          <TableBody>
-            {rows.map(row => (
-              <TableRow key={row.name}>
-                <TableCell component="th" scope="row">
-                  {row.name}
-                </TableCell>
-                <TableCell align="left">{row.value}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      {
+        isLoading ? (
+          <div>Loading...</div>
+        ) : Object.keys(weatherDetails).length ? (
+          <>
+            <div className={classes.summary}>
+              <img className={classes.weatherImage} src={`http://openweathermap.org/img/w/${weatherDetails.weather[0].icon}.png`} alt="Weather representation" />
+              <Typography variant="h4" gutterBottom>
+                {weatherDetails.main.temp} &deg;C
+              </Typography>
+            </div>
+            <TableContainer component={Paper}>
+              <Table className={classes.table} aria-label="simple table">
+                <TableBody>
+                  {rows.map(row => (
+                    <TableRow key={row.name}>
+                      <TableCell component="th" scope="row">
+                        {row.name}
+                      </TableCell>
+                      <TableCell align="left">{row.value}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </>
+        ) : null
+      }
     </>
   );
 };
