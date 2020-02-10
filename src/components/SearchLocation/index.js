@@ -9,7 +9,6 @@ import parse from 'autosuggest-highlight/parse';
 import throttle from 'lodash/throttle';
 
 import { LocationContext } from '../../context/LocationContext';
-import Api from '../../services/Api';
 
 const loadScript = (src, position, id) => {
   if (!position) {
